@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "295129606081",
+    "project_id": "tezlapen",
+    "storage_bucket": "tezlapen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295129606081:android:2c9e9feb23513fad413140",
+        "android_client_info": {
+          "package_name": "com.example.verygoodcore.tezla_pen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7UWwyic4JzzGn0_TS8NqvfXMHQBClcbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295129606081:android:0dcbc26d5be8dce9413140",
+        "android_client_info": {
+          "package_name": "com.example.verygoodcore.tezlapen_v2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7UWwyic4JzzGn0_TS8NqvfXMHQBClcbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
