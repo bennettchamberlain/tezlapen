@@ -23,7 +23,7 @@ class AppRepository {
     final documentRef = collectionRef.doc('product1');
     // Get the document with the given product name
     final documentSnapshot = await documentRef.get();
-
+    
     // Check if the document exists
     if (documentSnapshot.exists) {
       return Product(

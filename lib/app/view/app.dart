@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tezlapen_v2/bloc/app_bloc.dart';
 import 'package:tezlapen_v2/l10n/l10n.dart';
-import 'package:tezlapen_v2/src/ChangeProduct/change_product_info_screen.dart';
 import 'package:tezlapen_v2/src/ChangeProduct/change_product_password_screen.dart';
 import 'package:tezlapen_v2/src/product_screen.dart';
 import 'package:vrouter/vrouter.dart';
+
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -31,7 +31,7 @@ class App extends StatelessWidget {
       routes: [
         VGuard(
           beforeEnter: (vRedirector) async {
-            BlocProvider.of<AppBloc>(context).add(NewUserEvent());
+            BlocProvider.of<AppBloc>(context).add(NewUserEvent());       
           },
           stackedRoutes: [
             VWidget(path: '/', widget: const ProductScreen()),

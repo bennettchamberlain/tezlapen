@@ -4,8 +4,10 @@ part of 'product_bloc.dart';
 abstract class ProductEvent {}
 
 class GetProductInfoEvent extends ProductEvent {
-  GetProductInfoEvent({required this.videoIndex});
-  final int videoIndex;
+  GetProductInfoEvent(
+   // {required this.videoIndex}
+    );
+ // final int videoIndex;
 }
 
 class UploadUrlToFirestoreEvent extends ProductEvent {
@@ -23,3 +25,5 @@ class UploadProductToFirestoreEvent extends ProductEvent {
 
   final Product product;
 }
+
+

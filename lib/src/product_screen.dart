@@ -3,7 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tezlapen_v2/bloc/app_bloc.dart';
 import 'package:tezlapen_v2/src/affiliate_link_widget.dart';
+import 'package:tezlapen_v2/src/product%20screen/mobile/product_screen_mobile.dart';
+import 'package:tezlapen_v2/src/product%20screen/tablet/product_screen_tablet.dart';
+import 'package:tezlapen_v2/src/product%20screen/web/product_screen_web.dart';
 import 'package:tezlapen_v2/src/product_info_widget.dart';
+import 'package:tezlapen_v2/src/responsive_widget.dart';
 import 'package:tezlapen_v2/src/testimonials_widget.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -16,9 +20,13 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: BlocBuilder<AppBloc, AppState>(
+    return const ResponsiveWidget(
+      largeScreen: ProductScreenWeb(),
+      mediumScreen: ProductScreenTablet(),
+      smallScreen: ProductScreenMobile(),
+    );
+
+    /*BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {
             if (state is NewUserSignedInState && state.affiliateLinksOn) {
               return const Row(
@@ -76,8 +84,6 @@ class _ProductScreenState extends State<ProductScreen> {
               );
             }
           },
-        ),
-      ),
-    );
+        ),*/
   }
 }

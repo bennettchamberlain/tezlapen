@@ -9,6 +9,8 @@ import 'package:tezlapen_v2/bloc/product_bloc.dart';
 
 import 'package:tezlapen_v2/firebase_options.dart';
 
+import 'bloc/video cubit/video_cubit.dart';
+
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();
 
@@ -46,6 +48,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         BlocProvider<ProductBloc>(
           create: (BuildContext context) => ProductBloc(),
         ),
+        BlocProvider<VideoCubit>(create: (BuildContext context)=> VideoCubit())
       ],
       child: await builder(),
     ),

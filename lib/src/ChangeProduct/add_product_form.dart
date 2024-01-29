@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'testimonials_form.dart';
+import 'package:tezlapen_v2/src/ChangeProduct/testimonials_form.dart';
 
 class AddProductForm extends StatefulWidget {
   const AddProductForm({super.key});
@@ -77,11 +77,11 @@ class _AddProductFormState extends State<AddProductForm> {
             ),
             ElevatedButton(
               onPressed: () {
-                List<Map> testimonials = [];
-                for (int i = 0; i < testimonialNamesControllers.length; i++) {
+                final testimonials = <Map>[];
+                for (var i = 0; i < testimonialNamesControllers.length; i++) {
                   testimonials.add({
                     'testimonialName': testimonialNamesControllers[i].text,
-                    'testimonialVideo': testimonialUrlsControllers[i].text
+                    'testimonialVideo': testimonialUrlsControllers[i].text,
                   });
                 }
                 FirebaseFirestore.instance

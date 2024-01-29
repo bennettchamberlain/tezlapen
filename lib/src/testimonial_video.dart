@@ -1,11 +1,12 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:tezlapen_v2/src/product_model.dart';
 import 'package:video_player/video_player.dart';
 
 class TestimonialVideo extends StatefulWidget {
+
   const TestimonialVideo({required this.url, super.key});
   final String url;
+  
 
   @override
   _TestimonialVideoState createState() => _TestimonialVideoState();

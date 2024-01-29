@@ -21,8 +21,8 @@ class _ChangeProductPasswordScreenState
                 onPressed: () {
                   context.vRouter.to('/');
                 },
-                icon: Icon(Icons.home)),
-            title: Text('For Admin Use Only')),
+                icon: const Icon(Icons.home),),
+            title: const Text('For Admin Use Only'),),
         body: Column(
           children: [
             const SizedBox(height: 40),
@@ -43,23 +43,23 @@ class _ChangeProductPasswordScreenState
                 ),
                 controller: passwordcontroller,
               ),
-            )),
+            ),),
             TextButton(
                 onPressed: () {
-                  if (passwordcontroller.text == "QualityControl") {
+                  if (passwordcontroller.text == 'QualityControl') {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChangeProductInfoScreen(),
+                        builder: (context) => const ChangeProductInfoScreen(),
                       ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Incorrect Password")));
+                        const SnackBar(content: Text('Incorrect Password')),);
                   }
                 },
-                child: Text("Log In"))
+                child: const Text('Log In'),),
           ],
-        ));
+        ),);
   }
 }

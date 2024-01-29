@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tezlapen_v2/src/ChangeProduct/testimonial_video_upload_widget.dart';
-import 'package:tezlapen_v2/src/ChangeProduct/video_upload_widget.dart';
 
 class TestimonialsForm extends StatefulWidget {
   TestimonialsForm({
@@ -20,7 +19,7 @@ class _TestimonialsFormState extends State<TestimonialsForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Editing the testimonials Section will require you to upload all testimonials again', style: TextStyle(color: Colors.white),),
+        const Text('Editing the testimonials Section will require you to upload all testimonials again', style: TextStyle(color: Colors.white),),
         for (int i = 0; i < widget.testimonialNameControllers.length; i++)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -29,7 +28,7 @@ class _TestimonialsFormState extends State<TestimonialsForm> {
                 Expanded(
                   flex: 3,
                   child: TextFormField(
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     maxLines: 3,
                     controller: widget.testimonialNameControllers[i],
                     decoration: InputDecoration(
@@ -38,16 +37,15 @@ class _TestimonialsFormState extends State<TestimonialsForm> {
                         vertical: 24,
                       ),
                       labelText: 'Testimonial ${i + 1}',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: const TextStyle(color: Colors.white),
                       border: const OutlineInputBorder(
                         borderSide: BorderSide(width: 3),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Expanded(
-                  flex: 1,
                   child: TestimonialVideoUploadWidget(
                     videoUrl: widget.testimonialUrlControllers[i],
                   ),

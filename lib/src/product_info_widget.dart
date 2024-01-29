@@ -6,7 +6,8 @@ import 'package:tezlapen_v2/src/video_widget.dart';
 import 'package:video_player/video_player.dart';
 
 class ProductInfoWidget extends StatefulWidget {
-  const ProductInfoWidget({super.key});
+  const ProductInfoWidget({ super.key});
+  
 
   @override
   State<ProductInfoWidget> createState() => _ProductInfoWidgetState();
@@ -15,58 +16,81 @@ class ProductInfoWidget extends StatefulWidget {
 class _ProductInfoWidgetState extends State<ProductInfoWidget> {
   @override
   void initState() {
-    BlocProvider.of<ProductBloc>(context)
-        .add(GetProductInfoEvent(videoIndex: 0));
+    // BlocProvider.of<ProductBloc>(context)
+    //     .add(GetProductInfoEvent(videoIndex: 0));
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductBloc, ProductState>(
+    return const Column();
+    /*  BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
         if (state is ProductInfoSuccessState) {
-          final VideoPlayerController vidController =
-              VideoPlayerController.networkUrl(
-                  Uri.parse(state.product.videoUrl));
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                constraints: BoxConstraints(maxHeight: 450),
-                child: VideoPlayerWidget(
-                  controller: vidController,
-                  url: state.product.videoUrl,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-                child: Text(
-                  state.product.productName,
-                  style: TextStyle(color: Colors.white, fontSize: 35),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 750),
-                  child: Text(
-                    state.product.description,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-              ),
-            ],
+          final vidController = VideoPlayerController.networkUrl(
+            Uri.parse(state.product.videoUrl),
           );
+          if (widget.screenSize == ScreenSize.small) {
+            return Column(
+              children: [
+                const ResponsiveVideoPlayer(),
+                const SizedBox(height: 10),
+                Text(
+                  state.product.productName,
+                  style: const TextStyle(color: Colors.white, fontSize: 25),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  state.product.description,
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ],
+            );
+          } else {
+            return const Center(
+              child: Text('out of bound'),
+            );
+          }
+
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     Container(
+          //       constraints: BoxConstraints(maxHeight: widget.screenSize.size),
+          //       child: VideoPlayerWidget(
+          //         controller: vidController,
+          //         url: state.product.videoUrl,
+          //       ),
+          //     ),
+          //     Padding(
+          //       padding:
+          //           const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          //       child: Text(
+          //         state.product.productName,
+          //         style: const TextStyle(color: Colors.white, fontSize: 35),
+          //       ),
+          //     ),
+          //     Padding(
+          //       padding: const EdgeInsets.symmetric(horizontal: 16),
+          //       child: Container(
+          //         constraints: BoxConstraints(maxWidth: widget.screenSize.size),
+          //         child: Text(
+          //           state.product.description,
+          //           style: const TextStyle(color: Colors.white, fontSize: 18),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // );
         } else if (state is ProductInfoRebuildState) {
-          final VideoPlayerController vidController =
+          final vidController =
               VideoPlayerController.networkUrl(Uri.parse(state.video));
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                constraints: BoxConstraints(maxHeight: 450),
+                constraints: BoxConstraints(maxHeight: widget.screenSize.size),
                 child: VideoPlayerWidget(
                   controller: vidController,
                   url: state.video,
@@ -74,19 +98,19 @@ class _ProductInfoWidgetState extends State<ProductInfoWidget> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: Text(
                   state.product.productName,
-                  style: TextStyle(color: Colors.white, fontSize: 35),
+                  style: const TextStyle(color: Colors.white, fontSize: 35),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Container(
-                  constraints: BoxConstraints(maxWidth: 750),
+                  constraints: BoxConstraints(maxWidth: widget.screenSize.size),
                   child: Text(
                     state.product.description,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
               ),
@@ -116,6 +140,6 @@ class _ProductInfoWidgetState extends State<ProductInfoWidget> {
           );
         }
       },
-    );
+    );*/
   }
 }

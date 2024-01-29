@@ -2,12 +2,14 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tezlapen_v2/bloc/product_bloc.dart';
-import 'package:tezlapen_v2/src/product_model.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
-  const VideoPlayerWidget(
-      {required this.controller, required this.url, super.key});
+  const VideoPlayerWidget({
+    required this.controller,
+    required this.url,
+    super.key,
+  });
   final VideoPlayerController controller;
   final String url;
 
@@ -65,7 +67,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       builder: (context, state) {
         if (state is ProductInfoSuccessState) {
           return Container(
-            constraints: const BoxConstraints(maxHeight: 563, maxWidth: 1000),
+            //  constraints: const BoxConstraints(maxHeight: 563, maxWidth: 1000),
             child: _isVideoLoading
                 ? const Center(
                     child: CircularProgressIndicator(
@@ -76,7 +78,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        constraints: BoxConstraints(maxHeight: 450),
+                        // constraints: const BoxConstraints(maxHeight: 450),
                         child: AspectRatio(
                           //aspectRatio: widget.controller.value.aspectRatio,
                           aspectRatio: widget.controller.value.aspectRatio,
@@ -101,7 +103,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           );
         } else {
           return Container(
-            constraints: const BoxConstraints(maxHeight: 563, maxWidth: 1000),
+            // constraints: const BoxConstraints(maxHeight: 563, maxWidth: 1000),
             child: _isVideoLoading
                 ? const Center(
                     child: CircularProgressIndicator(
@@ -112,7 +114,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        constraints: BoxConstraints(maxHeight: 450),
+                        // constraints: const BoxConstraints(maxHeight: 450),
                         child: AspectRatio(
                           //aspectRatio: widget.controller.value.aspectRatio,
                           aspectRatio: widget.controller.value.aspectRatio,
