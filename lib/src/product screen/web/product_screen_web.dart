@@ -1,5 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tezlapen_v2/app_repository.dart';
@@ -9,6 +10,7 @@ import 'package:tezlapen_v2/bloc/video%20cubit/video_state.dart';
 import 'package:tezlapen_v2/src/affiliate_link_widget.dart';
 import 'package:tezlapen_v2/src/product_info_widget.dart';
 import 'package:tezlapen_v2/src/testimonial_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class ProductScreenWeb extends StatefulWidget {
@@ -34,92 +36,116 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
     }
   }
 
-
   int playerIndex = 0;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
+        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         child: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, productState) {
             if (productState is ProductInfoSuccessState) {
-             BlocProvider.of<VideoCubit>(context).play(productState.video);
+              BlocProvider.of<VideoCubit>(context).play(productState.video);
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
-                    width: size.width / 1.8,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: size.width - 50,
-                          height: size.height / 1.5,
-                          child: BlocBuilder<VideoCubit, VideoState>(
-                            builder: (context, state) {
-                              if (state is VideoInitializedState) {
-                             
-                                return SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: AspectRatio(
-                                    aspectRatio:
-                                        state.controller.value.aspectRatio,
-                                    child: Chewie(
-                                      controller: ChewieController(
-                                        allowedScreenSleep: false,
-                                        materialProgressColors:
-                                            ChewieProgressColors(
-                                          handleColor: const Color.fromARGB(
-                                            255,
-                                            255,
-                                            255,
-                                            255,
+                  SingleChildScrollView(
+                    child: SizedBox(
+                      width: size.width / 1.8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: size.width - 50,
+                            height: size.height / 1.5,
+                            child: BlocBuilder<VideoCubit, VideoState>(
+                              builder: (context, state) {
+                                if (state is VideoInitializedState) {
+                                  return Container(
+                                    color: Colors.black,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: AspectRatio(
+                                      aspectRatio:
+                                          state.controller.value.aspectRatio,
+                                      child: Chewie(
+                                        controller: ChewieController(
+                                          allowedScreenSleep: false,
+                                          materialProgressColors:
+                                              ChewieProgressColors(
+                                            handleColor: const Color.fromARGB(
+                                              255,
+                                              255,
+                                              255,
+                                              255,
+                                            ),
+                                            playedColor: Colors.red,
+                                            bufferedColor: Colors.red.shade100,
                                           ),
-                                          playedColor: Colors.red,
-                                          bufferedColor: Colors.red.shade100,
+                                          hideControlsTimer:
+                                              const Duration(seconds: 1),
+                                          showControlsOnInitialize: false,
+                                          videoPlayerController:
+                                              state.controller,
                                         ),
-                                        hideControlsTimer:
-                                            const Duration(seconds: 1),
-                                        showControlsOnInitialize: false,
-                                        videoPlayerController: state.controller,
                                       ),
                                     ),
-                                  ),
-                                );
-                              } else if (state is VideoInitialState) {
-                                return const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.red,
-                                  ),
-                                );
-                              } else {
-                                return const SizedBox();
-                              }
-                            },
+                                  );
+                                } else if (state is VideoInitialState) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.red,
+                                    ),
+                                  );
+                                } else {
+                                  return const SizedBox();
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                        Text(
-                          productState.product.productName,
-                          style: const TextStyle(
-                            fontSize: 23,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 15),
+                          Text(
+                            productState.product.productName,
+                            style: const TextStyle(
+                              fontSize: 23,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          productState.product.description,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
+                          SizedBox(height: 5),
+                          Text(
+                            productState.product.description,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: FloatingActionButton.extended(
+                                backgroundColor:
+                                    Color.fromARGB(255, 232, 33, 39),
+                                onPressed: () {
+                                  launchUrl(
+                                      Uri.parse('${'https://stripe.com'}'));
+                                },
+                                label: Text(
+                                  'Buy Now for \$${productState.product.price}',
+                                  style: TextStyle(
+                                      fontSize: 24, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 40)
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 50),
+                  const SizedBox(width: 30),
                   Expanded(
                     child: SizedBox(
                       child: ListView.builder(

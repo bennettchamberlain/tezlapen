@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tezlapen_v2/src/product_model.dart';
 
 class AppRepository {
@@ -10,11 +11,16 @@ class AppRepository {
     // Replace 'users' and 'boughtProducts' with your actual collection names
     final CollectionReference usersCollection =
         FirebaseFirestore.instance.collection('users');
-    final querySnapshot = await usersCollection
-        .where('boughtProducts', arrayContains: targetUID)
-        .get();
+    final docSnapshot = await usersCollection.doc('$targetUID').get();
 
-    return querySnapshot.docs.isNotEmpty;
+    return docSnapshot['boughtProducts'] as bool;
+  }
+
+  Future<void> AddUidToUsersCollection(String targetUID) async {
+    await FirebaseFirestore.instance.collection('users').doc('$targetUID').set(
+      {'boughtProduct': true},
+      SetOptions(merge: true),
+    );
   }
 
   Future<Product> getProductInfo() async {
@@ -23,30 +29,30 @@ class AppRepository {
     final documentRef = collectionRef.doc('product1');
     // Get the document with the given product name
     final documentSnapshot = await documentRef.get();
-    
+
     // Check if the document exists
     if (documentSnapshot.exists) {
       return Product(
-        productName: documentSnapshot['productName'].toString(),
-        videoUrl: documentSnapshot['videoUrl'].toString(),
-        description: documentSnapshot['description'].toString(),
-        testimonials: documentSnapshot['testimonials'] as List<dynamic>,
-        affiliateProducts: documentSnapshot['affiliate'] as List<dynamic>,
-      );
+          productName: documentSnapshot['productName'].toString(),
+          videoUrl: documentSnapshot['videoUrl'].toString(),
+          description: documentSnapshot['description'].toString(),
+          testimonials: documentSnapshot['testimonials'] as List<dynamic>,
+          affiliateProducts: documentSnapshot['affiliate'] as List<dynamic>,
+          price: documentSnapshot['price'] as double);
     } else {
       // Document does not exist
       print(
         'Document with product name "${documentSnapshot['productName']}" does not exist.',
       );
       return Product(
-        productName: documentSnapshot['productName'].toString(),
-        videoUrl: documentSnapshot['videoUrl'].toString(),
-        description: documentSnapshot['description'].toString(),
-        testimonials:
-            documentSnapshot['testimonials'] as List<Map<String, String>>,
-        affiliateProducts:
-            documentSnapshot['affiliate'] as List<Map<String, String>>,
-      );
+          productName: documentSnapshot['productName'].toString(),
+          videoUrl: documentSnapshot['videoUrl'].toString(),
+          description: documentSnapshot['description'].toString(),
+          testimonials:
+              documentSnapshot['testimonials'] as List<Map<String, String>>,
+          affiliateProducts:
+              documentSnapshot['affiliate'] as List<Map<String, String>>,
+          price: documentSnapshot['price'] as double);
     }
   }
 

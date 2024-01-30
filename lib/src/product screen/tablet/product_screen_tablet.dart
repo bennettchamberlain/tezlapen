@@ -1,5 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tezlapen_v2/app_repository.dart';
@@ -52,7 +53,8 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        Container(
+                          color: Colors.black,
                           width: size.width - 50,
                           height: size.height / 1.5,
                           child: BlocBuilder<VideoCubit, VideoState>(

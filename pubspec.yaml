@@ -25,6 +25,7 @@ dependencies:
   shimmer: ^3.0.0
   video_player: ^2.8.2
   vrouter: ^1.2.1
+  url_launcher: ^6.2.4
 
 dev_dependencies:
   bloc_test: ^9.1.4

@@ -1,5 +1,7 @@
 import 'package:chewie/chewie.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tezlapen_v2/app_repository.dart';
@@ -9,6 +11,7 @@ import 'package:tezlapen_v2/bloc/video%20cubit/video_state.dart';
 import 'package:tezlapen_v2/src/affiliate_link_widget.dart';
 import 'package:tezlapen_v2/src/product_info_widget.dart';
 import 'package:tezlapen_v2/src/testimonial_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class ProductScreenMobile extends StatefulWidget {
@@ -34,7 +37,6 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
     }
   }
 
-
   int playerIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -45,20 +47,22 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
         child: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, productState) {
             if (productState is ProductInfoSuccessState) {
+              productState.video;
               BlocProvider.of<VideoCubit>(context).play(productState.video);
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      Container(
+                        color: Colors.black,
                         width: size.width - 50,
                         height: size.height / 2.8,
                         child: BlocBuilder<VideoCubit, VideoState>(
                           builder: (context, state) {
                             if (state is VideoInitializedState) {
-                            
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 child: AspectRatio(
@@ -98,17 +102,49 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                           },
                         ),
                       ),
+                      SizedBox(height: 15),
                       Text(
                         productState.product.productName,
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 28,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800),
                       ),
+                      SizedBox(height: 5),
                       Text(
                         productState.product.description,
                         style:
                             const TextStyle(fontSize: 16, color: Colors.white),
                       ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: FloatingActionButton.extended(
+                            backgroundColor: Color.fromARGB(255, 232, 33, 39),
+                            onPressed: () {
+                              launchUrl(Uri.parse('${'https://stripe.com'}'));
+                            },
+                            label: Text(
+                              'Buy Now for \$${productState.product.price}',
+                              style:
+                                  TextStyle(fontSize: 24, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
                     ],
+                  ),
+                  Divider(),
+                  const Text(
+                    "Testimonials",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   Expanded(
                     child: ListView.builder(

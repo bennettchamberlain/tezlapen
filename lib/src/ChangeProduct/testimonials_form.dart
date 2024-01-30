@@ -19,7 +19,6 @@ class _TestimonialsFormState extends State<TestimonialsForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text('Editing the testimonials Section will require you to upload all testimonials again', style: TextStyle(color: Colors.white),),
         for (int i = 0; i < widget.testimonialNameControllers.length; i++)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -32,15 +31,21 @@ class _TestimonialsFormState extends State<TestimonialsForm> {
                     maxLines: 3,
                     controller: widget.testimonialNameControllers[i],
                     decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 24,
                       ),
                       labelText: 'Testimonial ${i + 1}',
                       labelStyle: const TextStyle(color: Colors.white),
-                      border: const OutlineInputBorder(
-                        borderSide: BorderSide(width: 3),
-                      ),
                     ),
                   ),
                 ),
@@ -56,6 +61,7 @@ class _TestimonialsFormState extends State<TestimonialsForm> {
                   onPressed: () {
                     setState(() {
                       widget.testimonialNameControllers.removeAt(i);
+                      widget.testimonialUrlControllers.removeAt(i);
                     });
                   },
                 ),
