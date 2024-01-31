@@ -1,4 +1,5 @@
 import 'package:chewie/chewie.dart';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,9 @@ import 'package:tezlapen_v2/src/product_info_widget.dart';
 import 'package:tezlapen_v2/src/testimonial_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
+import 'package:vrouter/vrouter.dart';
+
+
 
 class ProductScreenWeb extends StatefulWidget {
   const ProductScreenWeb({super.key});
@@ -36,7 +40,6 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
     }
   }
 
-  int playerIndex = 0;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -104,7 +107,7 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                               },
                             ),
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Text(
                             productState.product.productName,
                             style: const TextStyle(
@@ -113,34 +116,49 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 5),
-                          Text(
+                          const SizedBox(height: 5),
+                          ExpandableText(
                             productState.product.description,
+                            maxLines: 3,
+                            expandText: 'Read more',
+                            collapseText: 'Read less',
+                            linkColor: Colors.red,
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.white,
                             ),
                           ),
+                          const SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: FloatingActionButton.extended(
                                 backgroundColor:
-                                    Color.fromARGB(255, 232, 33, 39),
-                                onPressed: () {
-                                  launchUrl(
-                                      Uri.parse('${'https://stripe.com'}'));
+                                    const Color.fromARGB(255, 232, 33, 39),
+                                onPressed: () async {
+                                  BlocProvider.of<VideoCubit>(context)
+                                      .emit(VideoInitialState());
+                                  final sessionId = await AppRepository()
+                                      .customerPaymentInfo();
+                                  Future.delayed(
+                                    const Duration(seconds: 1),
+                                    () {
+                                      context.vRouter.to('/payment/$sessionId');
+                                    },
+                                  );
                                 },
                                 label: Text(
                                   'Buy Now for \$${productState.product.price}',
-                                  style: TextStyle(
-                                      fontSize: 24, color: Colors.white),
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 40)
+                          const SizedBox(height: 40),
                         ],
                       ),
                     ),

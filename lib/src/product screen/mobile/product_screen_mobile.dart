@@ -1,4 +1,5 @@
 import 'package:chewie/chewie.dart';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +14,7 @@ import 'package:tezlapen_v2/src/product_info_widget.dart';
 import 'package:tezlapen_v2/src/testimonial_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
+import 'package:vrouter/vrouter.dart';
 
 class ProductScreenMobile extends StatefulWidget {
   const ProductScreenMobile({super.key});
@@ -37,7 +39,6 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
     }
   }
 
-  int playerIndex = 0;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -47,7 +48,6 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
         child: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, productState) {
             if (productState is ProductInfoSuccessState) {
-              productState.video;
               BlocProvider.of<VideoCubit>(context).play(productState.video);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,44 +102,62 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                           },
                         ),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Text(
                         productState.product.productName,
                         style: const TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800),
+                          fontSize: 28,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                      SizedBox(height: 5),
-                      Text(
+                      const SizedBox(height: 5),
+                      ExpandableText(
                         productState.product.description,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
+                        expandText: 'Read more',
+                        collapseText: 'Read less',
+                        linkColor: Colors.red,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: FloatingActionButton.extended(
-                            backgroundColor: Color.fromARGB(255, 232, 33, 39),
-                            onPressed: () {
-                              launchUrl(Uri.parse('${'https://stripe.com'}'));
+                            backgroundColor:
+                                const Color.fromARGB(255, 232, 33, 39),
+                            onPressed: () async {
+                              BlocProvider.of<VideoCubit>(context)
+                                  .emit(VideoInitialState());
+                              final sessionId =
+                                  await AppRepository().customerPaymentInfo();
+                              Future.delayed(
+                                const Duration(seconds: 1),
+                                () {
+                                  context.vRouter.to('/payment/$sessionId');
+                                },
+                              );
                             },
                             label: Text(
                               'Buy Now for \$${productState.product.price}',
-                              style:
-                                  TextStyle(fontSize: 24, color: Colors.white),
+                              style: const TextStyle(
+                                fontSize: 24,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 40),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   const Text(
-                    "Testimonials",
+                    'Testimonials',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
