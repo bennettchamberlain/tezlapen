@@ -20,5 +20,7 @@ class VideoCubit extends Cubit<VideoState>{
     emit(VideoInitializedState(videoController));
   }
 
+  
+
     
 }

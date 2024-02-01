@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:tezlapen_v2/src/product_model.dart';
+import 'package:tezlapen_v2/src/model/paid_user.dart';
+import 'package:tezlapen_v2/src/model/product_model.dart';
 
 class AppRepository {
   /// {@macro studios_repository}
@@ -10,51 +11,54 @@ class AppRepository {
 
   Future<bool> doesUIDExistInCollection(String targetUID) async {
     // Replace 'users' and 'boughtProducts' with your actual collection names
-    final CollectionReference usersCollection =
-        FirebaseFirestore.instance.collection('users');
-    final docSnapshot = await usersCollection.doc(targetUID).get();
+    final usersCollection = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(targetUID)
+        .get();
 
-    return docSnapshot['boughtProducts'] as bool;
+    if (usersCollection.exists) {
+      return PaidUser.fromMap(usersCollection.data()!).boughtProduct;
+    } else {
+      return false;
+    }
   }
 
-  Future<void> AddUidToUsersCollection(String targetUID) async {
-    await FirebaseFirestore.instance.collection('users').doc(targetUID).set(
-      {'boughtProduct': true},
-      SetOptions(merge: true),
+  Future<void> addUidToPaidUsersCollection() async {
+    final paidUser = PaidUser(
+      userUuid: FirebaseAuth.instance.currentUser!.uid,
+      boughtProduct: true,
+      createdAt: DateTime.now(),
     );
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(paidUser.userUuid)
+        .set(
+          paidUser.toMap(),
+          SetOptions(merge: true),
+        );
   }
 
   Future<Product> getProductInfo() async {
-    final CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('product');
-    final documentRef = collectionRef.doc('product1');
+    final collectionRef = await FirebaseFirestore.instance
+        .collection('product')
+        .doc('product1')
+        .get();
+    //final documentRef = collectionRef.doc('product1');
     // Get the document with the given product name
-    final documentSnapshot = await documentRef.get();
+    // final documentSnapshot = await documentRef.get();
 
     // Check if the document exists
-    if (documentSnapshot.exists) {
-      return Product(
-        productName: documentSnapshot['productName'].toString(),
-        videoUrl: documentSnapshot['videoUrl'].toString(),
-        description: documentSnapshot['description'].toString(),
-        testimonials: documentSnapshot['testimonials'] as List<dynamic>,
-        affiliateProducts: documentSnapshot['affiliate'] as List<dynamic>,
-        price: documentSnapshot['price'] as double,
+    if (collectionRef.exists) {
+      return Product.fromMap(
+        collectionRef.data()!,
       );
     } else {
       // Document does not exist
       print(
-        'Document with product name "${documentSnapshot['productName']}" does not exist.',
+        'Document with product name "${collectionRef.data()!['productName']}" does not exist.',
       );
-      return Product(
-        productName: documentSnapshot['productName'].toString(),
-        videoUrl: documentSnapshot['videoUrl'].toString(),
-        description: documentSnapshot['description'].toString(),
-        testimonials:
-            documentSnapshot['testimonials'] as List<Map<String, String>>,
-        affiliateProducts:
-            documentSnapshot['affiliate'] as List<Map<String, String>>,
-        price: documentSnapshot['price'] as double,
+      return Product.fromMap(
+        collectionRef.data()!,
       );
     }
   }
@@ -91,12 +95,13 @@ class AppRepository {
         .doc(checkoutSessionId)
         .snapshots();
   }
-/// returns checkoutsessionId
+
+  /// returns checkoutsessionId
   Future<String> customerPaymentInfo() async {
     final firestore = FirebaseFirestore.instance;
     //get the products from cloud firestore
     final getProduct = await firestore.collection('products').get();
-    // used the product id to get fetch  the price, the reason for this 2 api call is you can add 
+    // used the product id to get fetch  the price, the reason for this 2 api call is you can add
     //products to allow customers to pay without touching the code
     final price = await FirebaseFirestore.instance
         .collection('products')

@@ -7,6 +7,7 @@ import 'package:tezlapen_v2/l10n/l10n.dart';
 import 'package:tezlapen_v2/src/ChangeProduct/change_product_password_screen.dart';
 import 'package:tezlapen_v2/src/product_screen.dart';
 import 'package:tezlapen_v2/src/stripe/payment_page.dart';
+import 'package:tezlapen_v2/src/stripe/success_payment_page.dart';
 import 'package:vrouter/vrouter.dart';
 
 class App extends StatelessWidget {
@@ -40,6 +41,11 @@ class App extends StatelessWidget {
         VGuard(
           stackedRoutes: [
             VWidget(path: '/payment/:sessionId', widget: const PaymentPage()),
+          ],
+        ),
+        VGuard(
+          stackedRoutes: [
+            VWidget(path: '/successpayment', widget: const SuccessPayment()),
           ],
         ),
         VGuard(

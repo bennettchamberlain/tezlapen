@@ -15,8 +15,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vrouter/vrouter.dart';
 
-
-
 class ProductScreenWeb extends StatefulWidget {
   const ProductScreenWeb({super.key});
 
@@ -169,17 +167,15 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                       child: ListView.builder(
                         itemCount: productState.product.testimonials.length,
                         itemBuilder: (context, index) {
+                          final testimonial =
+                              productState.product.testimonials[index];
                           return TestimonialCard(
                             index: index,
-                            videoUrl: productState.product.testimonials[index]
-                                ['testimonialVideo'] as String,
-                            testimonialName:
-                                productState.product.testimonials[index]
-                                    ['testimonialName'] as String,
+                            videoUrl: testimonial.testimonialVideo,
+                            testimonialName: testimonial.testimonialName,
                             onTap: () async {
                               await BlocProvider.of<VideoCubit>(context).play(
-                                productState.product.testimonials[index]
-                                    ['testimonialVideo'] as String,
+                                testimonial.testimonialVideo,
                               );
                             },
                           );

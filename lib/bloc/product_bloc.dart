@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:tezlapen_v2/app_repository.dart';
-import 'package:tezlapen_v2/src/product_model.dart';
+import 'package:tezlapen_v2/src/model/product_model.dart';
 import 'package:video_player/video_player.dart';
 
 part 'product_event.dart';

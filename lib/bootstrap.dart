@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:tezlapen_v2/bloc/product_bloc.dart';
 
 import 'package:tezlapen_v2/firebase_options.dart';
 
-import 'bloc/video cubit/video_cubit.dart';
+import 'package:tezlapen_v2/bloc/video%20cubit/video_cubit.dart';
 
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();
@@ -48,7 +49,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         BlocProvider<ProductBloc>(
           create: (BuildContext context) => ProductBloc(),
         ),
-        BlocProvider<VideoCubit>(create: (BuildContext context)=> VideoCubit())
+        BlocProvider<VideoCubit>(
+            create: (BuildContext context) => VideoCubit()),
       ],
       child: await builder(),
     ),
