@@ -15,6 +15,7 @@ import 'package:tezlapen_v2/src/testimonial_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vrouter/vrouter.dart';
+import 'package:tezlapen_v2/bloc/app_bloc.dart';
 
 class ProductScreenMobile extends StatefulWidget {
   const ProductScreenMobile({super.key});
@@ -27,13 +28,13 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
   @override
   void initState() {
     super.initState();
-    _initVideoPlayer();
+    _initProduct();
   }
 
-  Future<void> _initVideoPlayer() async {
+  Future<void> _initProduct() async {
     try {
       BlocProvider.of<ProductBloc>(context).add(GetProductInfoEvent());
-      // await
+      BlocProvider.of<AppBloc>(context).add(CheckUserStatus());
     } catch (error) {
       print('Error fetching video URL: $error');
     }
@@ -133,14 +134,8 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                             onPressed: () async {
                               BlocProvider.of<VideoCubit>(context)
                                   .emit(VideoInitialState());
-                              final sessionId =
-                                  await AppRepository().customerPaymentInfo();
-                              Future.delayed(
-                                const Duration(seconds: 1),
-                                () {
-                                  context.vRouter.to('/payment/$sessionId');
-                                },
-                              );
+
+                              context.vRouter.to('/paymentform');
                             },
                             label: Text(
                               'Buy Now for \$${productState.product.price}',
@@ -165,20 +160,41 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                     ),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: productState.product.testimonials.length,
-                      itemBuilder: (context, index) {
-                        final testimonial =
-                            productState.product.testimonials[index];
-                        return TestimonialCard(
-                          index: index,
-                          videoUrl: testimonial.testimonialVideo,
-                          testimonialName: testimonial.testimonialName,
-                          onTap: () async {
-                            await BlocProvider.of<VideoCubit>(context).play(
-                              testimonial.testimonialVideo,
-                            );
-                          },
+                    child: BlocBuilder<AppBloc, AppState>(
+                      builder: (context, state) {
+                        if (state is AffiliateOn) {
+                          return SizedBox(
+                            child: ListView.builder(
+                              itemCount: productState.product.affiliate.length,
+                              itemBuilder: (context, index) {
+                                final affiliate =
+                                    productState.product.affiliate[index];
+                                return AffiliateLinkWidget(
+                                  affiliate: affiliate,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                        return SizedBox(
+                          child: ListView.builder(
+                            itemCount: productState.product.testimonials.length,
+                            itemBuilder: (context, index) {
+                              final testimonial =
+                                  productState.product.testimonials[index];
+                              return TestimonialCard(
+                                index: index,
+                                videoUrl: testimonial.testimonialVideo,
+                                testimonialName: testimonial.testimonialName,
+                                onTap: () async {
+                                  await BlocProvider.of<VideoCubit>(context)
+                                      .play(
+                                    testimonial.testimonialVideo,
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         );
                       },
                     ),

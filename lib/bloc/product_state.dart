@@ -18,3 +18,5 @@ final class ProductInfoRebuildState extends ProductState {
   final Product product;
   final String video;
 }
+
+

@@ -16,13 +16,16 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+
+
   @override
   Widget build(BuildContext context) {
     final sessionId = context.vRouter.pathParameters['sessionId'];
 
     return Scaffold(
       body: Center(
-        child: StreamBuilder(
+        child:
+         StreamBuilder(
           stream: AppRepository().checkOutSessionStream(
             checkoutSessionId:sessionId!,
           ),

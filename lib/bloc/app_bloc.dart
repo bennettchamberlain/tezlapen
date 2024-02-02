@@ -36,5 +36,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         print('Error signing in anonymously: $e');
       }
     });
+
+  on<CheckUserStatus>((event, emit) async {
+      final status = await AppRepository()
+          .doesUIDExistInCollection(FirebaseAuth.instance.currentUser!.uid);
+          status ?
+      emit(AffiliateOn()): emit(AffiliateOff());
+    });
   }
 }

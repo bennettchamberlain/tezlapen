@@ -10,6 +10,8 @@ import 'package:tezlapen_v2/src/stripe/payment_page.dart';
 import 'package:tezlapen_v2/src/stripe/success_payment_page.dart';
 import 'package:vrouter/vrouter.dart';
 
+import '../../src/stripe/email_form.dart';
+
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -33,6 +35,7 @@ class App extends StatelessWidget {
         VGuard(
           beforeEnter: (vRedirector) async {
             BlocProvider.of<AppBloc>(context).add(NewUserEvent());
+             BlocProvider.of<AppBloc>(context).add(CheckUserStatus());
           },
           stackedRoutes: [
             VWidget(path: '/', widget: const ProductScreen()),
@@ -41,6 +44,11 @@ class App extends StatelessWidget {
         VGuard(
           stackedRoutes: [
             VWidget(path: '/payment/:sessionId', widget: const PaymentPage()),
+          ],
+        ),
+         VGuard(
+          stackedRoutes: [
+            VWidget(path: '/paymentform', widget: const EmailFormPage()),
           ],
         ),
         VGuard(

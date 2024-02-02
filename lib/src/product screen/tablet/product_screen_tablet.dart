@@ -8,9 +8,12 @@ import 'package:tezlapen_v2/app_repository.dart';
 import 'package:tezlapen_v2/bloc/product_bloc.dart';
 import 'package:tezlapen_v2/bloc/video%20cubit/video_cubit.dart';
 import 'package:tezlapen_v2/bloc/video%20cubit/video_state.dart';
+import 'package:tezlapen_v2/src/affiliate_link_widget.dart';
 
 import 'package:tezlapen_v2/src/testimonial_card.dart';
 import 'package:vrouter/vrouter.dart';
+
+import 'package:tezlapen_v2/bloc/app_bloc.dart';
 
 class ProductScreenTablet extends StatefulWidget {
   const ProductScreenTablet({super.key});
@@ -23,12 +26,13 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
   @override
   void initState() {
     super.initState();
-    _initVideoPlayer();
+    _initProduct();
   }
 
-  Future<void> _initVideoPlayer() async {
+  Future<void> _initProduct() async {
     try {
       BlocProvider.of<ProductBloc>(context).add(GetProductInfoEvent());
+       BlocProvider.of<AppBloc>(context).add(CheckUserStatus());
     } catch (error) {
       print('Error fetching video URL: $error');
     }
@@ -129,20 +133,14 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
                               child: FloatingActionButton.extended(
                                 backgroundColor:
                                     const Color.fromARGB(255, 232, 33, 39),
-                                onPressed: () async {
+                                onPressed: () {
                                   BlocProvider.of<VideoCubit>(context)
                                       .emit(VideoInitialState());
-                                  final sessionId = await AppRepository()
-                                      .customerPaymentInfo();
-                                  Future.delayed(
-                                    const Duration(seconds: 1),
-                                    () {
-                                      context.vRouter.to('/payment/$sessionId');
-                                    },
-                                  );
+
+                                  context.vRouter.to('/paymentform');
                                 },
                                 label: Text(
-                                  'Buy ssNow for \$${productState.product.price}',
+                                  'Buy Now for \$${productState.product.price}',
                                   style: const TextStyle(
                                     fontSize: 24,
                                     color: Colors.white,
@@ -157,24 +155,43 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
                   ),
                   const SizedBox(width: 40),
                   Expanded(
-                    child: SizedBox(
-                      child: ListView.builder(
-                      itemCount: productState.product.testimonials.length,
-                      itemBuilder: (context, index) {
-                        final testimonial =
-                            productState.product.testimonials[index];
-                        return TestimonialCard(
-                          index: index,
-                          videoUrl: testimonial.testimonialVideo,
-                          testimonialName: testimonial.testimonialName,
-                          onTap: () async {
-                            await BlocProvider.of<VideoCubit>(context).play(
-                              testimonial.testimonialVideo,
-                            );
-                          },
+                    child: BlocBuilder<AppBloc, AppState>(
+                      builder: (context, state) {
+                        if (state is AffiliateOn) {
+                          return SizedBox(
+                            child: ListView.builder(
+                              itemCount: productState.product.affiliate.length,
+                              itemBuilder: (context, index) {
+                                final affiliate =
+                                    productState.product.affiliate[index];
+                                return AffiliateLinkWidget(
+                                  affiliate: affiliate,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                        return SizedBox(
+                          child: ListView.builder(
+                            itemCount: productState.product.testimonials.length,
+                            itemBuilder: (context, index) {
+                              final testimonial =
+                                  productState.product.testimonials[index];
+                              return TestimonialCard(
+                                index: index,
+                                videoUrl: testimonial.testimonialVideo,
+                                testimonialName: testimonial.testimonialName,
+                                onTap: () async {
+                                  await BlocProvider.of<VideoCubit>(context)
+                                      .play(
+                                    testimonial.testimonialVideo,
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         );
                       },
-                    ),
                     ),
                   ),
                 ],

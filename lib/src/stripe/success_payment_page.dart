@@ -14,10 +14,11 @@ class SuccessPayment extends StatefulWidget {
 
 class _SuccessPaymentState extends State<SuccessPayment> {
   final confettiController = ConfettiController();
-  bool isPlaying = false;
+
+  bool isPaid = false;
   @override
   void initState() {
-    // addUserToPaidCollection();
+    addUserToPaidCollection();
     confettiController.play();
     Future.delayed(const Duration(seconds: 2), () {
       successDialog(context);
@@ -25,12 +26,9 @@ class _SuccessPaymentState extends State<SuccessPayment> {
     super.initState();
   }
 
-  bool isPaid = true;
-
   Future<void> addUserToPaidCollection() async {
-    final check = context.vRouter.pathParameters[''];
     try {
-      // await AppRepository().addUidToPaidUsersCollection();
+      await AppRepository().addUidToPaidUsersCollection();
     } catch (e) {
       rethrow;
     }
@@ -38,37 +36,20 @@ class _SuccessPaymentState extends State<SuccessPayment> {
 
   @override
   Widget build(BuildContext context) {
-    return isPaid
-        ? Stack(
-            alignment: Alignment.center,
-            children: [
-              const Scaffold(
-                body: Center(),
-              ),
-              ConfettiWidget(
-                maximumSize: const Size(50, 50),
-                confettiController: confettiController,
-                blastDirection: -pi / 2,
-                blastDirectionality: BlastDirectionality.explosive,
-              ),
-            ],
-          )
-        : Scaffold(
-            body: Center(
-              child: Column(
-                children: [
-                  const Text('Page not found'),
-                  const SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () {
-                      context.vRouter.to('/');
-                    },
-                    child: const Text('Back to home page'),
-                  ),
-                ],
-              ),
-            ),
-          );
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        const Scaffold(
+          body: Center(),
+        ),
+        ConfettiWidget(
+          maximumSize: const Size(50, 50),
+          confettiController: confettiController,
+          blastDirection: -pi / 2,
+          blastDirectionality: BlastDirectionality.explosive,
+        ),
+      ],
+    );
   }
 }
 

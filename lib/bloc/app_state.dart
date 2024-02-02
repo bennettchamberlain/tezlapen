@@ -10,3 +10,7 @@ final class NewUserSignedInState extends AppState {
   final String userID;
   bool affiliateLinksOn = false;
 }
+
+final class AffiliateOn extends AppState {}
+
+final class AffiliateOff extends AppState {}

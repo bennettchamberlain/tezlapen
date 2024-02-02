@@ -4,3 +4,5 @@ part of 'app_bloc.dart';
 abstract class AppEvent {}
 
 class NewUserEvent extends AppEvent {}
+
+class CheckUserStatus extends AppEvent {}

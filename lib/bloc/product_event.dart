@@ -5,9 +5,9 @@ abstract class ProductEvent {}
 
 class GetProductInfoEvent extends ProductEvent {
   GetProductInfoEvent(
-   // {required this.videoIndex}
-    );
- // final int videoIndex;
+      // {required this.videoIndex}
+      );
+  // final int videoIndex;
 }
 
 class UploadUrlToFirestoreEvent extends ProductEvent {

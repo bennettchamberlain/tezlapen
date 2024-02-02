@@ -51,6 +51,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         ),
         BlocProvider<VideoCubit>(
             create: (BuildContext context) => VideoCubit()),
+
       ],
       child: await builder(),
     ),

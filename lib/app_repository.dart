@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tezlapen_v2/src/model/paid_user.dart';
 import 'package:tezlapen_v2/src/model/product_model.dart';
+import 'package:uuid/uuid.dart';
 
 class AppRepository {
   /// {@macro studios_repository}
@@ -96,6 +97,16 @@ class AppRepository {
         .snapshots();
   }
 
+  Future<void> updateEmail(String email) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection('customers')
+        .doc(userId)
+        .update({
+      'email': email,
+    });
+  }
+
   /// returns checkoutsessionId
   Future<String> customerPaymentInfo() async {
     final firestore = FirebaseFirestore.instance;
@@ -112,14 +123,16 @@ class AppRepository {
         .get();
     final docRef = await firestore
         .collection('customers')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .doc(
+          FirebaseAuth.instance.currentUser?.uid,
+        )
         .collection('checkout_sessions')
         .add({
       'client': 'web',
       'mode': 'payment',
       'price': price.docs.first.id,
-      'success_url': 'http://localhost:57608/',
-      'cancel_url': 'http://localhost:57608/my-product',
+      'success_url': 'http://localhost:53901/successpayment',
+      'cancel_url': 'http://localhost:53901/my-product',
     });
     return docRef.id;
   }

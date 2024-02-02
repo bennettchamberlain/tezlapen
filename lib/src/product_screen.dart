@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tezlapen_v2/bloc/app_bloc.dart';
+import 'package:tezlapen_v2/bloc/product_bloc.dart';
 import 'package:tezlapen_v2/src/affiliate_link_widget.dart';
 import 'package:tezlapen_v2/src/product%20screen/mobile/product_screen_mobile.dart';
 import 'package:tezlapen_v2/src/product%20screen/tablet/product_screen_tablet.dart';
@@ -18,6 +19,12 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  @override
+  void initState() {
+   
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return const ResponsiveWidget(

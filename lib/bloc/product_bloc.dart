@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:meta/meta.dart';
 import 'package:tezlapen_v2/app_repository.dart';
 import 'package:tezlapen_v2/src/model/product_model.dart';
@@ -39,5 +41,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       );
       emit(UploadSuccessState());
     });
+
+ 
   }
 }
