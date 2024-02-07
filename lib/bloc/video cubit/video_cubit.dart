@@ -15,11 +15,9 @@ class VideoCubit extends Cubit<VideoState> {
     }
     await videoController.setVolume(0);
     await videoController.initialize().then((value) async {
-      await videoController.play();
+      //await videoController.play();
       await videoController.setVolume(100);
     });
     emit(VideoInitializedState(videoController));
   }
-
- 
 }

@@ -18,6 +18,7 @@ class _AffiliateLinkWidgetState extends State<AffiliateLinkWidget> {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LinkPreview(
             enableAnimation: true,
@@ -32,8 +33,7 @@ class _AffiliateLinkWidgetState extends State<AffiliateLinkWidget> {
               fontWeight: FontWeight.w800,
             ),
             padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
+              vertical: 24,
             ),
             onPreviewDataFetched: (data) {
               setState(() {

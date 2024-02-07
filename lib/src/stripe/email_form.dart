@@ -19,10 +19,16 @@ class _EmailFormPageState extends State<EmailFormPage> {
     return Scaffold(
       body: Center(
         child: isLoading
-            ? const CircularProgressIndicator()
+            ? const CircularProgressIndicator(color: Colors.red)
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text('Enter your email to begin your purchase',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                      )),
+                  SizedBox(height: 20),
                   SizedBox(
                     child: TextFormField(
                       controller: emailController,
@@ -66,7 +72,7 @@ class _EmailFormPageState extends State<EmailFormPage> {
                         final sessionId =
                             await AppRepository().customerPaymentInfo();
                         Future.delayed(
-                          const Duration(seconds: 1),
+                          const Duration(seconds: 0),
                           () {
                             context.vRouter.to('/payment/$sessionId');
                           },

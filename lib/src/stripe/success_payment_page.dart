@@ -59,12 +59,12 @@ Future<void> successDialog(BuildContext context) {
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Congratulation🎉🎉'),
+        title: const Text('Congratulations!'),
         content: const SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
               Text(
-                "You've just unlocked our marketplace of Tesla related products!",
+                "You've just unlocked our marketplace of Tesla related products",
                 style: TextStyle(fontSize: 20),
               ),
             ],

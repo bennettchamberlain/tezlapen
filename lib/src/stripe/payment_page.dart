@@ -34,7 +34,7 @@ class _PaymentPageState extends State<PaymentPage> {
             snapshot,
           ) {
             if (snapshot.connectionState != ConnectionState.active) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator(color: Colors.red));
             } else if (snapshot.hasError || snapshot.hasData == false) {
               return const Text('Something went wrong');
             }
@@ -48,7 +48,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     'Error processing payment.',
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator(color: Colors.red));
             }
           },
         ),

@@ -131,8 +131,8 @@ class AppRepository {
       'client': 'web',
       'mode': 'payment',
       'price': price.docs.first.id,
-      'success_url': 'http://localhost:53901/successpayment',
-      'cancel_url': 'http://localhost:53901/my-product',
+      'success_url': 'https://tezlapen.com/successpayment/',
+      'cancel_url': 'https://tezlapen.com/',
     });
     return docRef.id;
   }

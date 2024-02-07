@@ -18,6 +18,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VRouter(
+      title: "TezlaPen",
+      debugShowCheckedModeBanner: false,
       mode: VRouterMode.history,
       theme: ThemeData(
         //textTheme: TextTheme(
@@ -35,7 +37,7 @@ class App extends StatelessWidget {
         VGuard(
           beforeEnter: (vRedirector) async {
             BlocProvider.of<AppBloc>(context).add(NewUserEvent());
-             BlocProvider.of<AppBloc>(context).add(CheckUserStatus());
+            BlocProvider.of<AppBloc>(context).add(CheckUserStatus());
           },
           stackedRoutes: [
             VWidget(path: '/', widget: const ProductScreen()),
@@ -46,7 +48,7 @@ class App extends StatelessWidget {
             VWidget(path: '/payment/:sessionId', widget: const PaymentPage()),
           ],
         ),
-         VGuard(
+        VGuard(
           stackedRoutes: [
             VWidget(path: '/paymentform', widget: const EmailFormPage()),
           ],
@@ -108,6 +110,7 @@ class App extends StatelessWidget {
             ),
           ],
         ),
+        VRouteRedirector(path: '*', redirectTo: '/'),
       ],
     );
   }

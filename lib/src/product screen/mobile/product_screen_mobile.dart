@@ -50,156 +50,192 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
           builder: (context, productState) {
             if (productState is ProductInfoSuccessState) {
               BlocProvider.of<VideoCubit>(context).play(productState.video);
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  Column(
+              double maxheight =
+                  550 + productState.product.testimonials.length * 300;
+
+              return SingleChildScrollView(
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: maxheight),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        color: Colors.black,
-                        width: size.width - 50,
-                        height: size.height / 2.8,
-                        child: BlocBuilder<VideoCubit, VideoState>(
-                          builder: (context, state) {
-                            if (state is VideoInitializedState) {
-                              return SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: AspectRatio(
-                                  aspectRatio:
-                                      state.controller.value.aspectRatio,
-                                  child: Chewie(
-                                    controller: ChewieController(
-                                      allowedScreenSleep: false,
-                                      materialProgressColors:
-                                          ChewieProgressColors(
-                                        handleColor: const Color.fromARGB(
-                                          255,
-                                          255,
-                                          255,
-                                          255,
+                      const SizedBox(height: 20),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            color: Colors.black,
+                            width: size.width - 50,
+                            height: size.height / 2.8,
+                            child: BlocBuilder<VideoCubit, VideoState>(
+                              builder: (context, state) {
+                                if (state is VideoInitializedState) {
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: AspectRatio(
+                                      aspectRatio:
+                                          state.controller.value.aspectRatio,
+                                      child: Chewie(
+                                        controller: ChewieController(
+                                          allowedScreenSleep: false,
+                                          materialProgressColors:
+                                              ChewieProgressColors(
+                                            handleColor: const Color.fromARGB(
+                                              255,
+                                              255,
+                                              255,
+                                              255,
+                                            ),
+                                            playedColor: Colors.red,
+                                            bufferedColor: Colors.red.shade100,
+                                          ),
+                                          hideControlsTimer:
+                                              const Duration(seconds: 1),
+                                          showControlsOnInitialize: false,
+                                          videoPlayerController:
+                                              state.controller,
                                         ),
-                                        playedColor: Colors.red,
-                                        bufferedColor: Colors.red.shade100,
                                       ),
-                                      hideControlsTimer:
-                                          const Duration(seconds: 1),
-                                      showControlsOnInitialize: false,
-                                      videoPlayerController: state.controller,
                                     ),
+                                  );
+                                } else if (state is VideoInitialState) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.red,
+                                    ),
+                                  );
+                                } else {
+                                  return const SizedBox();
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Text(
+                            productState.product.productName,
+                            style: const TextStyle(
+                              fontSize: 28,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          ExpandableText(
+                            productState.product.description,
+                            expandText: 'Read more',
+                            collapseText: 'Read less',
+                            linkColor: Colors.red,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16, right: 20),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: FloatingActionButton.extended(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 232, 33, 39),
+                                onPressed: () async {
+                                  BlocProvider.of<VideoCubit>(context)
+                                      .emit(VideoInitialState());
+
+                                  context.vRouter.to('/paymentform');
+                                },
+                                label: Text(
+                                  'Buy Now for \$${productState.product.price}',
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.white,
                                   ),
                                 ),
-                              );
-                            } else if (state is VideoInitialState) {
-                              return const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.red,
-                                ),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        productState.product.productName,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      ExpandableText(
-                        productState.product.description,
-                        expandText: 'Read more',
-                        collapseText: 'Read less',
-                        linkColor: Colors.red,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: FloatingActionButton.extended(
-                            backgroundColor:
-                                const Color.fromARGB(255, 232, 33, 39),
-                            onPressed: () async {
-                              BlocProvider.of<VideoCubit>(context)
-                                  .emit(VideoInitialState());
-
-                              context.vRouter.to('/paymentform');
-                            },
-                            label: Text(
-                              'Buy Now for \$${productState.product.price}',
-                              style: const TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
                               ),
                             ),
                           ),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
+                      const Divider(),
+                      const Text(
+                        'Testimonials',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      Expanded(
+                        child: BlocBuilder<AppBloc, AppState>(
+                          builder: (context, state) {
+                            if (state is AffiliateOn) {
+                              return SizedBox(
+                                child: ListView.builder(
+                                  itemCount:
+                                      productState.product.affiliate.length,
+                                  itemBuilder: (context, index) {
+                                    final affiliate =
+                                        productState.product.affiliate[index];
+                                    return AffiliateLinkWidget(
+                                      affiliate: affiliate,
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                            return Column(
+                              children: [
+                                for (int i = 0;
+                                    i <
+                                        productState
+                                            .product.testimonials.length;
+                                    i++)
+                                  TestimonialCard(
+                                    index: i,
+                                    videoUrl: productState.product
+                                        .testimonials[i].testimonialVideo,
+                                    testimonialName: productState.product
+                                        .testimonials[i].testimonialName,
+                                    onTap: () async {
+                                      await BlocProvider.of<VideoCubit>(context)
+                                          .play(
+                                        productState.product.testimonials[i]
+                                            .testimonialVideo,
+                                      );
+                                    },
+                                  )
+                              ],
+                            );
+
+                            // return SizedBox(
+                            //   child: ListView.builder(
+                            //     itemCount: productState.product.testimonials.length,
+                            //     itemBuilder: (context, index) {
+                            //       final testimonial =
+                            //           productState.product.testimonials[index];
+                            //       return TestimonialCard(
+                            //         index: index,
+                            //         videoUrl: testimonial.testimonialVideo,
+                            //         testimonialName: testimonial.testimonialName,
+                            //         onTap: () async {
+                            //           await BlocProvider.of<VideoCubit>(context)
+                            //               .play(
+                            //             testimonial.testimonialVideo,
+                            //           );
+                            //         },
+                            //       );
+                            //     },
+                            //   ),
+                            // );
+                          },
+                        ),
+                      ),
                     ],
                   ),
-                  const Divider(),
-                  const Text(
-                    'Testimonials',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Expanded(
-                    child: BlocBuilder<AppBloc, AppState>(
-                      builder: (context, state) {
-                        if (state is AffiliateOn) {
-                          return SizedBox(
-                            child: ListView.builder(
-                              itemCount: productState.product.affiliate.length,
-                              itemBuilder: (context, index) {
-                                final affiliate =
-                                    productState.product.affiliate[index];
-                                return AffiliateLinkWidget(
-                                  affiliate: affiliate,
-                                );
-                              },
-                            ),
-                          );
-                        }
-                        return SizedBox(
-                          child: ListView.builder(
-                            itemCount: productState.product.testimonials.length,
-                            itemBuilder: (context, index) {
-                              final testimonial =
-                                  productState.product.testimonials[index];
-                              return TestimonialCard(
-                                index: index,
-                                videoUrl: testimonial.testimonialVideo,
-                                testimonialName: testimonial.testimonialName,
-                                onTap: () async {
-                                  await BlocProvider.of<VideoCubit>(context)
-                                      .play(
-                                    testimonial.testimonialVideo,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                ),
               );
             } else if (productState is ProductInitial) {
               return Center(

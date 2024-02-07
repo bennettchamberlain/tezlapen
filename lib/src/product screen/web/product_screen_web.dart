@@ -55,6 +55,7 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
               BlocProvider.of<VideoCubit>(context).play(productState.video);
 
               return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SingleChildScrollView(
@@ -114,7 +115,7 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                           Text(
                             productState.product.productName,
                             style: const TextStyle(
-                              fontSize: 23,
+                              fontSize: 36,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -123,8 +124,8 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                           ExpandableText(
                             productState.product.description,
                             maxLines: 3,
-                            expandText: 'Read more',
-                            collapseText: 'Read less',
+                            expandText: ' Read more',
+                            collapseText: ' Read less',
                             linkColor: Colors.red,
                             style: const TextStyle(
                               fontSize: 16,
@@ -135,7 +136,7 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: Align(
-                              alignment: Alignment.centerRight,
+                              alignment: Alignment.center,
                               child: FloatingActionButton.extended(
                                 backgroundColor:
                                     const Color.fromARGB(255, 232, 33, 39),
@@ -164,7 +165,7 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                   Expanded(
                     child: BlocBuilder<AppBloc, AppState>(
                       builder: (context, state) {
-                       if (state is AffiliateOn) {
+                        if (state is AffiliateOn) {
                           return SizedBox(
                             child: ListView.builder(
                               itemCount: productState.product.affiliate.length,

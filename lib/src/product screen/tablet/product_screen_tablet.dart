@@ -32,7 +32,7 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
   Future<void> _initProduct() async {
     try {
       BlocProvider.of<ProductBloc>(context).add(GetProductInfoEvent());
-       BlocProvider.of<AppBloc>(context).add(CheckUserStatus());
+      BlocProvider.of<AppBloc>(context).add(CheckUserStatus());
     } catch (error) {
       print('Error fetching video URL: $error');
     }
@@ -51,6 +51,7 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     width: size.width / 1.8,
@@ -108,7 +109,7 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
                           Text(
                             productState.product.productName,
                             style: const TextStyle(
-                              fontSize: 23,
+                              fontSize: 36,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -129,7 +130,7 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: Align(
-                              alignment: Alignment.centerRight,
+                              alignment: Alignment.center,
                               child: FloatingActionButton.extended(
                                 backgroundColor:
                                     const Color.fromARGB(255, 232, 33, 39),

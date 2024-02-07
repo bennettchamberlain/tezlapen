@@ -10,23 +10,32 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(AppInitial()) {
     on<NewUserEvent>((event, emit) async {
       try {
-        final userCredential =
-            await FirebaseAuth.instance.signInAnonymously();
+        final userCredential = await FirebaseAuth.instance.signInAnonymously();
         final appRepo = AppRepository();
 
         try {
           final uidExists = await appRepo.doesUIDExistInCollection(
-              userCredential.user?.uid ?? 'null value',);
+            userCredential.user?.uid ?? 'null value',
+          );
 
           if (uidExists) {
             print(
-                'UID exists in the collection. Customer has bought a TezlaPen',);
-            emit(NewUserSignedInState(
-                userCredential.user?.uid ?? 'Null value', true,),);
+              'UID exists in the collection. Customer has bought a TezlaPen',
+            );
+            emit(
+              NewUserSignedInState(
+                userCredential.user?.uid ?? 'Null value',
+                true,
+              ),
+            );
           } else {
             print('UID does not exist in the collection.');
-            emit(NewUserSignedInState(
-                userCredential.user?.uid ?? 'Null value', false,),);
+            emit(
+              NewUserSignedInState(
+                userCredential.user?.uid ?? 'Null value',
+                false,
+              ),
+            );
           }
         } catch (error) {
           print('Error checking UID existence: $error');
@@ -37,11 +46,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
     });
 
-  on<CheckUserStatus>((event, emit) async {
-      final status = await AppRepository()
-          .doesUIDExistInCollection(FirebaseAuth.instance.currentUser!.uid);
-          status ?
-      emit(AffiliateOn()): emit(AffiliateOff());
+    on<CheckUserStatus>((event, emit) async {
+      if (FirebaseAuth.instance.currentUser == null) {
+        return;
+      } else {
+        final status = await AppRepository()
+            .doesUIDExistInCollection(FirebaseAuth.instance.currentUser!.uid);
+        status ? emit(AffiliateOn()) : emit(AffiliateOff());
+      }
     });
   }
 }
