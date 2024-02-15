@@ -67,7 +67,7 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                         children: [
                           Container(
                             color: Colors.black,
-                            width: size.width - 50,
+                            width: size.width,
                             height: size.height / 2.8,
                             child: BlocBuilder<VideoCubit, VideoState>(
                               builder: (context, state) {
@@ -124,6 +124,7 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                           const SizedBox(height: 5),
                           ExpandableText(
                             productState.product.description,
+                            maxLines: 3,
                             expandText: 'Read more',
                             collapseText: 'Read less',
                             linkColor: Colors.red,
@@ -160,14 +161,7 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                         ],
                       ),
                       const Divider(),
-                      const Text(
-                        'Testimonials',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      
                       Expanded(
                         child: BlocBuilder<AppBloc, AppState>(
                           builder: (context, state) {

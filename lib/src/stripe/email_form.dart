@@ -71,12 +71,9 @@ class _EmailFormPageState extends State<EmailFormPage> {
                         await AppRepository().updateEmail(emailController.text);
                         final sessionId =
                             await AppRepository().customerPaymentInfo();
-                        Future.delayed(
-                          const Duration(seconds: 0),
-                          () {
-                            context.vRouter.to('/payment/$sessionId');
-                          },
-                        );
+
+                        context.vRouter.to('/payment/$sessionId');
+
                         setState(() {
                           isLoading = false;
                         });

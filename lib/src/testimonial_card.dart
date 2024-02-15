@@ -36,6 +36,15 @@ class _TestimonialCardState extends State<TestimonialCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (widget.index == 0)
+              Text(
+                'Testimonials',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             Stack(
               children: [
                 Container(
@@ -61,7 +70,7 @@ class _TestimonialCardState extends State<TestimonialCard> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 2),
             Container(
               constraints: BoxConstraints(maxWidth: 276),
               padding: const EdgeInsets.only(left: 4),
@@ -70,6 +79,7 @@ class _TestimonialCardState extends State<TestimonialCard> {
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
+            const SizedBox(height: 8),
           ],
         ),
       ),

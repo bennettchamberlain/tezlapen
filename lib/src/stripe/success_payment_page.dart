@@ -20,7 +20,7 @@ class _SuccessPaymentState extends State<SuccessPayment> {
   void initState() {
     addUserToPaidCollection();
     confettiController.play();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       successDialog(context);
     });
     super.initState();

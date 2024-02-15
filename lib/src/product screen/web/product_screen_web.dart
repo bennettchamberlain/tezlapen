@@ -55,8 +55,8 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
               BlocProvider.of<VideoCubit>(context).play(productState.video);
 
               return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SingleChildScrollView(
                     child: SizedBox(

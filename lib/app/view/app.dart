@@ -22,10 +22,11 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       mode: VRouterMode.history,
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         //textTheme: TextTheme(
         //bodySmall: TextStyle(color: Colors.blue),
         // ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 35, 35, 35),
+        scaffoldBackgroundColor: Color.fromARGB(255, 35, 35, 35),
         appBarTheme: AppBarTheme(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         ),
