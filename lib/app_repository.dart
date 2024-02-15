@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tezlapen_v2/src/model/paid_user.dart';
 import 'package:tezlapen_v2/src/model/product_model.dart';
-import 'package:uuid/uuid.dart';
+import 'dart:convert';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:tezlapen_v2/src/model/payment_response.dart';
 
 class AppRepository {
   /// {@macro studios_repository}
@@ -135,5 +139,61 @@ class AppRepository {
       'cancel_url': 'https://tezlapen.com/',
     });
     return docRef.id;
+  }
+
+  Future<PaymentResponse> payPalPayment(double amount) async {
+    final clientID = dotenv.get('clientID');
+    final clientSecret = dotenv.get('clientSecret');
+
+    final credentials = base64Encode(utf8.encode('$clientID:$clientSecret'));
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.sandbox.paypal.com/v1/payments/payment'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic $credentials',
+        },
+        body: jsonEncode(
+          {
+            'intent': 'sale',
+            'payer': {
+              'payment_method': 'paypal',
+            },
+            'transactions': [
+              {
+                'amount': {
+                  'total': amount,
+                  'currency': 'USD',
+                },
+              },
+            ],
+            'redirect_urls': {
+              'return_url': 'http://localhost:63305/successpayment/',
+              'cancel_url': 'http://localhost:63305/',
+            },
+          },
+        ),
+      );
+      if (response.statusCode == 201) {
+        final responseData = jsonDecode(response.body) as Map<String, dynamic>;
+        final approvalUrl = responseData['links']
+                .firstWhere((link) => link['rel'] == 'approval_url')['href']
+            as String;
+        return PaymentResponse(
+          isSuccess: true,
+          message: approvalUrl,
+        );
+      } else {
+        return PaymentResponse(
+          isSuccess: false,
+          message: 'Error ${response.body}',
+        );
+      }
+    } catch (e) {
+      return PaymentResponse(
+        isSuccess: false,
+        message: 'Error $e',
+      );
+    }
   }
 }

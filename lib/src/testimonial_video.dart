@@ -2,10 +2,11 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:tezlapen_v2/bloc/product_bloc.dart';
 import 'package:video_player/video_player.dart';
 
-import '../bloc/video cubit/video_cubit.dart';
+import 'package:tezlapen_v2/bloc/video%20cubit/video_cubit.dart';
 
 class TestimonialVideo extends StatefulWidget {
   const TestimonialVideo({required this.url, super.key});
@@ -75,7 +76,8 @@ class _TestimonialVideoState extends State<TestimonialVideo> {
                   children: [
                     Container(
                       constraints: BoxConstraints(
-                          maxHeight: _controller.value.size.height),
+                        maxHeight: _controller.value.size.height,
+                      ),
                       child: AspectRatio(
                         aspectRatio: _controller.value.aspectRatio,
                         //_controller.value.aspectRatio,

@@ -15,6 +15,8 @@ import 'package:vrouter/vrouter.dart';
 
 import 'package:tezlapen_v2/bloc/app_bloc.dart';
 
+import 'package:tezlapen_v2/src/payment/paypal/paypal_paywall.dart';
+
 class ProductScreenTablet extends StatefulWidget {
   const ProductScreenTablet({super.key});
 
@@ -36,6 +38,40 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
     } catch (error) {
       print('Error fetching video URL: $error');
     }
+  }
+
+  bool _paymentLoading = false;
+  Future<void> _payWithPayPal(double amount) async {
+    BlocProvider.of<VideoCubit>(context).emit(VideoInitialState());
+    setState(() {
+      _paymentLoading = true;
+    });
+    await AppRepository()
+        .payPalPayment(
+      amount,
+    )
+        .then((paymentResponse) {
+      if (paymentResponse.isSuccess) {
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (context) => PayPalPayWall(
+              url: paymentResponse.message,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(paymentResponse.message),
+          ),
+        );
+      }
+    });
+
+    setState(() {
+      _paymentLoading = false;
+    });
   }
 
   @override
@@ -130,23 +166,43 @@ class _ProductScreenTabletState extends State<ProductScreenTablet> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: Align(
-                              alignment: Alignment.center,
-                              child: FloatingActionButton.extended(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 232, 33, 39),
-                                onPressed: () {
-                                  BlocProvider.of<VideoCubit>(context)
-                                      .emit(VideoInitialState());
+                              child: Column(
+                                children: [
+                                  FloatingActionButton.extended(
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 232, 33, 39),
+                                    onPressed: () {
+                                      BlocProvider.of<VideoCubit>(context)
+                                          .emit(VideoInitialState());
 
-                                  context.vRouter.to('/paymentform');
-                                },
-                                label: Text(
-                                  'Buy Now for \$${productState.product.price}',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white,
+                                      context.vRouter.to('/paymentform');
+                                    },
+                                    label: Text(
+                                      'Buy Now for \$${productState.product.price}',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(height: 10),
+                                  FloatingActionButton.extended(
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 54, 97, 228),
+                                    onPressed: () => _payWithPayPal(
+                                      productState.product.price,
+                                    ),
+                                    label: _paymentLoading
+                                        ? const CircularProgressIndicator()
+                                        : const Text(
+                                            'Pay via Paypal',
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

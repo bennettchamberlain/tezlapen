@@ -6,11 +6,11 @@ import 'package:tezlapen_v2/bloc/app_bloc.dart';
 import 'package:tezlapen_v2/l10n/l10n.dart';
 import 'package:tezlapen_v2/src/ChangeProduct/change_product_password_screen.dart';
 import 'package:tezlapen_v2/src/product_screen.dart';
-import 'package:tezlapen_v2/src/stripe/payment_page.dart';
-import 'package:tezlapen_v2/src/stripe/success_payment_page.dart';
+import 'package:tezlapen_v2/src/payment/stripe/payment_page.dart';
+import 'package:tezlapen_v2/src/payment/stripe/success_payment_page.dart';
 import 'package:vrouter/vrouter.dart';
 
-import '../../src/stripe/email_form.dart';
+import '../../src/payment/stripe/email_form.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

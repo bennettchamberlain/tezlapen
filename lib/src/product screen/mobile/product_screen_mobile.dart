@@ -10,12 +10,11 @@ import 'package:tezlapen_v2/bloc/product_bloc.dart';
 import 'package:tezlapen_v2/bloc/video%20cubit/video_cubit.dart';
 import 'package:tezlapen_v2/bloc/video%20cubit/video_state.dart';
 import 'package:tezlapen_v2/src/affiliate_link_widget.dart';
-import 'package:tezlapen_v2/src/product_info_widget.dart';
 import 'package:tezlapen_v2/src/testimonial_card.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 import 'package:vrouter/vrouter.dart';
 import 'package:tezlapen_v2/bloc/app_bloc.dart';
+
+import '../../payment/paypal/paypal_paywall.dart';
 
 class ProductScreenMobile extends StatefulWidget {
   const ProductScreenMobile({super.key});
@@ -39,6 +38,40 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
       print('Error fetching video URL: $error');
     }
   }
+   bool _paymentLoading = false;
+  Future<void> _payWithPayPal(double amount) async {
+    BlocProvider.of<VideoCubit>(context).emit(VideoInitialState());
+    setState(() {
+      _paymentLoading = true;
+    });
+    await AppRepository()
+        .payPalPayment(
+      amount,
+    )
+        .then((paymentResponse) {
+      if (paymentResponse.isSuccess) {
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (context) => PayPalPayWall(
+              url: paymentResponse.message,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(paymentResponse.message),
+          ),
+        );
+      }
+    });
+
+    setState(() {
+      _paymentLoading = false;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -137,22 +170,43 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                             padding: const EdgeInsets.only(top: 16, right: 20),
                             child: Align(
                               alignment: Alignment.center,
-                              child: FloatingActionButton.extended(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 232, 33, 39),
-                                onPressed: () async {
-                                  BlocProvider.of<VideoCubit>(context)
-                                      .emit(VideoInitialState());
-
-                                  context.vRouter.to('/paymentform');
-                                },
-                                label: Text(
-                                  'Buy Now for \$${productState.product.price}',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white,
+                              child: Column(
+                                children: [
+                                  FloatingActionButton.extended(
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 232, 33, 39),
+                                    onPressed: () async {
+                                      BlocProvider.of<VideoCubit>(context)
+                                          .emit(VideoInitialState());
+                                  
+                                      context.vRouter.to('/paymentform');
+                                    },
+                                    label: Text(
+                                      'Buy Now for \$${productState.product.price}',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(height: 10),
+                                  FloatingActionButton.extended(
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 54, 97, 228),
+                                    onPressed: () => _payWithPayPal(
+                                      productState.product.price,
+                                    ),
+                                    label: _paymentLoading
+                                        ? const CircularProgressIndicator()
+                                        : const Text(
+                                            'Pay via Paypal',
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
