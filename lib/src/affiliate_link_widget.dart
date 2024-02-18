@@ -20,6 +20,10 @@ class _AffiliateLinkWidgetState extends State<AffiliateLinkWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            widget.affiliate.affiliateName,
+            style: const TextStyle(color: Colors.white),
+          ),
           LinkPreview(
             enableAnimation: true,
             linkStyle: style.copyWith(
@@ -33,7 +37,7 @@ class _AffiliateLinkWidgetState extends State<AffiliateLinkWidget> {
               fontWeight: FontWeight.w800,
             ),
             padding: const EdgeInsets.symmetric(
-              vertical: 24,
+              vertical: 8,
             ),
             onPreviewDataFetched: (data) {
               setState(() {
@@ -44,12 +48,6 @@ class _AffiliateLinkWidgetState extends State<AffiliateLinkWidget> {
             text: widget.affiliate.affiliateUrl,
             width: MediaQuery.of(context).size.width / 2,
           ),
-          const SizedBox(height: 10),
-          Text(
-            widget.affiliate.affiliateName,
-            style: const TextStyle(color: Colors.white),
-          ),
-          const SizedBox(),
         ],
       ),
     );

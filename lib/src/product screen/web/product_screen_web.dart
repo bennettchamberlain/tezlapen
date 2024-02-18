@@ -190,21 +190,25 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  FloatingActionButton.extended(
-                                    backgroundColor:
-                                        const Color.fromARGB(255, 54, 97, 228),
-                                    onPressed: () => _payWithPayPal(
-                                      productState.product.price,
-                                    ),
-                                    label: _paymentLoading
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            'Pay via Paypal',
-                                            style: TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.white,
+                                  SizedBox(
+                                    width: 200,
+                                    child: FloatingActionButton.extended(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 54, 97, 228),
+                                      onPressed: () => _payWithPayPal(
+                                        productState.product.price,
+                                      ),
+                                      label: _paymentLoading
+                                          ? const CircularProgressIndicator(
+                                              color: Colors.white)
+                                          : const Text(
+                                              'Pay via Paypal',
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -226,8 +230,23 @@ class _ProductScreenWebState extends State<ProductScreenWeb> {
                               itemBuilder: (context, index) {
                                 final affiliate =
                                     productState.product.affiliate[index];
-                                return AffiliateLinkWidget(
-                                  affiliate: affiliate,
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (index == 0)
+                                      const Text(
+                                        'Affiliate Products',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    AffiliateLinkWidget(
+                                      affiliate: affiliate,
+                                    ),
+                                    const SizedBox(height: 16)
+                                  ],
                                 );
                               },
                             ),

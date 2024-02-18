@@ -33,6 +33,15 @@ class _TestimonialCardState extends State<TestimonialCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (widget.index == 0)
+              const Text(
+                'Testimonials',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             Stack(
               children: [
                 Container(

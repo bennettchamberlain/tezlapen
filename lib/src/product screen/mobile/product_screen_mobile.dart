@@ -38,7 +38,8 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
       print('Error fetching video URL: $error');
     }
   }
-   bool _paymentLoading = false;
+
+  bool _paymentLoading = false;
   Future<void> _payWithPayPal(double amount) async {
     BlocProvider.of<VideoCubit>(context).emit(VideoInitialState());
     setState(() {
@@ -71,7 +72,6 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
       _paymentLoading = false;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +178,7 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                                     onPressed: () async {
                                       BlocProvider.of<VideoCubit>(context)
                                           .emit(VideoInitialState());
-                                  
+
                                       context.vRouter.to('/paymentform');
                                     },
                                     label: Text(
@@ -190,21 +190,25 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  FloatingActionButton.extended(
-                                    backgroundColor:
-                                        const Color.fromARGB(255, 54, 97, 228),
-                                    onPressed: () => _payWithPayPal(
-                                      productState.product.price,
-                                    ),
-                                    label: _paymentLoading
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            'Pay via Paypal',
-                                            style: TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.white,
+                                  SizedBox(
+                                    width: 200,
+                                    child: FloatingActionButton.extended(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 54, 97, 228),
+                                      onPressed: () => _payWithPayPal(
+                                        productState.product.price,
+                                      ),
+                                      label: _paymentLoading
+                                          ? const CircularProgressIndicator(
+                                              color: Colors.white)
+                                          : const Text(
+                                              'Pay via Paypal',
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -214,13 +218,21 @@ class _ProductScreenMobileState extends State<ProductScreenMobile> {
                         ],
                       ),
                       const Divider(),
-                      const Text(
-                        'Testimonials',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      BlocBuilder<AppBloc, AppState>(
+                        builder: (context, state) {
+                          if (state is AffiliateOn) {
+                            return const Text(
+                              'Affiliate Products',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        },
                       ),
                       Expanded(
                         child: BlocBuilder<AppBloc, AppState>(

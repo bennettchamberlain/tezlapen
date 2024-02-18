@@ -168,8 +168,8 @@ class AppRepository {
               },
             ],
             'redirect_urls': {
-              'return_url': 'http://localhost:63305/successpayment/',
-              'cancel_url': 'http://localhost:63305/',
+              'return_url': 'https://tezlapen.com/successpayment/',
+              'cancel_url': 'https://tezlapen.com/',
             },
           },
         ),
