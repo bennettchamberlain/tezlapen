@@ -4,7 +4,6 @@ import 'package:tezlapen_v2/src/model/paid_user.dart';
 import 'package:tezlapen_v2/src/model/product_model.dart';
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:tezlapen_v2/src/model/payment_response.dart';
@@ -142,8 +141,8 @@ class AppRepository {
   }
 
   Future<PaymentResponse> payPalPayment(double amount) async {
-    final clientID = dotenv.get('clientID');
-    final clientSecret = dotenv.get('clientSecret');
+    const clientID = 'AXgIsUcQ_58XhffPVUmHPYgTGvC-0vkCDxc-OX6Y2_rWCmw247D88tqgDOJNW6tSKD1fCXsjbj72y7GR';
+    const clientSecret ='EIgB0z4yRFxqtsAQ5xw9Wg5rf8SdRHSw31LQyLQ8ZVOx-7D2RL3iEUQNh0wr2gmmgujwMEHa6kksufVH';
 
     final credentials = base64Encode(utf8.encode('$clientID:$clientSecret'));
     try {
