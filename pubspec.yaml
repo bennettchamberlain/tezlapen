@@ -10,7 +10,7 @@ dependencies:
   any_link_preview: ^3.0.1
   bloc: ^8.1.2
   chewie: ^1.7.4
-  cloud_firestore: ^4.14.0
+  cloud_firestore: ^4.15.9
   confetti: ^0.7.0
   expandable_text: ^2.3.0
   file_picker: ^6.1.1
